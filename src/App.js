@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       Redux Saga tutorial
-      <button onClick={() => dispatch({ type: "CLICK" })}>click me</button>
+      <button onClick={() => dispatch({ type: "LOAD_DATA" })}>click me</button>
     </div>
   );
 }

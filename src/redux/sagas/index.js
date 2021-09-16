@@ -1,4 +1,4 @@
-import { put, takeLeading } from "redux-saga/effects";
+import { call, put, takeLeading } from "redux-saga/effects";
 const wait = (t) =>
   new Promise((resolve) => {
     setTimeout(resolve, t);
@@ -10,7 +10,7 @@ async function getPeople() {
   return data;
 }
 export function* workerSaga() {
-  const data = yield getPeople();
+  const data = yield call(getPeople);
   console.log(data);
   yield put({ type: "SET_PEOPLE", payload: data.results });
 }
@@ -19,7 +19,7 @@ export function* watchClickSaga() {
   //     yield take("CLICK");
   //     yield workerSaga();
   //   }
-  yield takeLeading("CLICK", workerSaga);
+  yield takeLeading("LOAD_DATA", workerSaga);
 }
 export default function* rootSaga() {
   yield watchClickSaga();
