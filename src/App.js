@@ -5,12 +5,7 @@ function App() {
   const store = useSelector((store) => store);
   const dispatch = useDispatch();
   console.log(store);
-  return (
-    <div className="App">
-      Redux Saga tutorial
-      <button onClick={() => dispatch({ type: "LOAD_DATA" })}>click me</button>
-    </div>
-  );
+  return <div className="App">Redux Saga tutorial</div>;
 }
 
 export default App;
