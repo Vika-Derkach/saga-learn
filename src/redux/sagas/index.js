@@ -1,4 +1,4 @@
-import { call, put, takeLeading } from "redux-saga/effects";
+import { call, fork, put, takeEvery } from "redux-saga/effects";
 const wait = (t) =>
   new Promise((resolve) => {
     setTimeout(resolve, t);
@@ -9,24 +9,39 @@ async function swapiGet(patern) {
 
   return data;
 }
-export function* workerSaga() {
-  //wait for this
-  const people = yield call(swapiGet, "people");
-  console.log(people);
 
-  //then do this
-  const planets = yield call(swapiGet, "planets");
-  console.log(planets);
+export function* loadPeople() {
+  const people = yield call(swapiGet, "people");
   yield put({ type: "SET_PEOPLE", payload: people.results });
-  yield put({ type: "SET_PLANETS", payload: planets.results });
+  console.log("load people");
 }
-export function* watchClickSaga() {
+export function* loadPlanets() {
+  const planets = yield call(swapiGet, "planets");
+  yield put({ type: "SET_PLANETS", payload: planets.results });
+  console.log("load planets");
+}
+
+export function* workerSaga() {
+  console.log("run paralel tasks");
+  yield fork(loadPeople);
+  yield fork(loadPlanets);
+  console.log("finish paralel tasks");
+}
+
+// run paralel tasks
+//  finish paralel tasks
+//  {people: Array(0), planets: Array(10)}
+//  load planets
+//  {people: Array(10), planets: Array(10)}
+//  load people
+
+export function* watchLoadDataSaga() {
   //   while (true) {
   //     yield take("CLICK");
   //     yield workerSaga();
   //   }
-  yield takeLeading("LOAD_DATA", workerSaga);
+  yield takeEvery("LOAD_DATA", workerSaga);
 }
 export default function* rootSaga() {
-  yield watchClickSaga();
+  yield fork(watchLoadDataSaga);
 }
