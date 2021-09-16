@@ -1,19 +1,23 @@
-import { all, call, spawn } from "redux-saga/effects";
+import { all, call, spawn, take } from "redux-saga/effects";
 import loadBasicData from "./initialSagas";
 import pageLoaderSaga from "./pageLoader";
 
-export function* saga2() {
-  console.log("Saga 2");
+export function* loadOnAction() {
+  while (true) {
+    yield take("LOAD_SOME_DATA");
+    console.log("LOAD_SOME_DATA start fetching");
+    const response = yield call(fetch, "https://swapi.dev/api/films");
+    const data = yield call([response, response.json]);
+    console.log("LOAD_SOME_DATA completed", data);
+  }
 }
-export function* saga3() {
-  console.log("Saga 3");
-}
+
 export default function* rootSaga() {
   //   yield spawn(saga1); //auth
   //   yield spawn(saga2); //users
   //   yield spawn(saga3); //payment
 
-  const sagas = [loadBasicData, pageLoaderSaga];
+  const sagas = [loadBasicData, pageLoaderSaga, loadOnAction];
   const retrySagas = yield sagas.map((saga) => {
     return spawn(function* () {
       while (true) {
