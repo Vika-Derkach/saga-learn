@@ -1,4 +1,4 @@
-import { call, fork, put, takeEvery } from "redux-saga/effects";
+import { call, fork, put, spawn, takeEvery } from "redux-saga/effects";
 const wait = (t) =>
   new Promise((resolve) => {
     setTimeout(resolve, t);
@@ -16,6 +16,7 @@ export function* loadPeople() {
   console.log("load people");
 }
 export function* loadPlanets() {
+  throw new Error();
   const planets = yield call(swapiGet, "planets");
   yield put({ type: "SET_PLANETS", payload: planets.results });
   console.log("load planets");
@@ -23,8 +24,8 @@ export function* loadPlanets() {
 
 export function* workerSaga() {
   console.log("run paralel tasks");
-  yield fork(loadPeople);
-  yield fork(loadPlanets);
+  yield spawn(loadPeople);
+  yield spawn(loadPlanets);
   console.log("finish paralel tasks");
 }
 
