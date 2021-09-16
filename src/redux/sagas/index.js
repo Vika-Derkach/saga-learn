@@ -1,28 +1,19 @@
-import { all, call, cancel, fork, spawn, take } from "redux-saga/effects";
+import { actionChannel, all, call, spawn, take } from "redux-saga/effects";
 import loadBasicData from "./initialSagas";
 import pageLoaderSaga from "./pageLoader";
 //worker
-export function* fetchPlanets(signal) {
-  const response = yield call(fetch, "https://swapi.dev/api/films", { signal });
+export function* fetchPlanets() {
+  const response = yield call(fetch, "https://swapi.dev/api/films");
 
   const data = yield call([response, response.json]);
   console.log("LOAD_SOME_DATA completed", data);
 }
 //watcher
 export function* loadOnAction() {
-  // yield takeLatest("LOAD_SOME_DATA", fetchPlanets);
-  let task;
-  let abortController = new AbortController();
-
+  const channal = yield actionChannel("LOAD_SOME_DATA");
   while (true) {
-    yield take("LOAD_SOME_DATA");
-    console.log("LOAD_SOME_DATA start fetching");
-    if (task) {
-      abortController.abort();
-      yield cancel(task);
-      abortController = new AbortController();
-    }
-    task = yield fork(fetchPlanets, abortController.signal);
+    yield take(channal);
+    yield call(fetchPlanets);
   }
 }
 
