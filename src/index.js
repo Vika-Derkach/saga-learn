@@ -7,9 +7,9 @@ import App from "./pages/App";
 import NotFound from "./pages/NotFound";
 import store from "./redux";
 import { history } from "./redux/reducers";
-
 ReactDOM.render(
   <Provider store={store}>
+    {/* <Router> */}
     <ConnectedRouter history={history}>
       <Switch>
         <Route path="/" exact>
@@ -21,6 +21,7 @@ ReactDOM.render(
         </Route>
       </Switch>
     </ConnectedRouter>
+    {/* </Router> */}
   </Provider>,
   document.getElementById("root")
 );

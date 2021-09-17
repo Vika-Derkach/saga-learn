@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { LOAD_USERS } from "../redux/reducers/people/actions";
 import { selectPeople } from "../redux/reducers/people/selectors";
 import PeopleTablePagination from "./PeopleTablePagination";
@@ -70,6 +71,7 @@ const PeopleTable = () => {
                 <th>Gender</th>
                 <th>Hair color</th>
                 <th>Height</th>
+                <th />
               </tr>
             </thead>
 
@@ -83,7 +85,9 @@ const PeopleTable = () => {
                   hair_color,
                   height,
                   created,
+                  url,
                 } = character;
+                const id = url.replaceAll(/\D/g, "");
                 return (
                   <tr key={created}>
                     <td>{name}</td>
@@ -92,6 +96,10 @@ const PeopleTable = () => {
                     <td>{gender}</td>
                     <td>{hair_color} </td>
                     <td>{height}</td>
+                    <td>
+                      {" "}
+                      <Link to={`/people/${id}`}> Details</Link>{" "}
+                    </td>
                   </tr>
                 );
               })}
