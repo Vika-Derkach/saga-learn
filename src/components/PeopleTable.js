@@ -14,11 +14,37 @@ const PeopleTable = () => {
         search: people.search,
       },
     });
+  const search = (e) =>
+    dispatch({
+      type: LOAD_USERS,
+      payload: {
+        page: 1,
+        search: e.target.value,
+      },
+    });
   console.log(people);
   return (
     <>
       {" "}
-      <h1 className="App">Star Wars People</h1>
+      <h1 className="App">
+        Star Wars People
+        <div className="row">
+          <div className="col s12">
+            <div className="row">
+              <div className="input-field col s12">
+                <input
+                  type="text"
+                  value={people.search}
+                  onChange={search}
+                  placeholder="Search people..."
+                  id="autocomplete-input"
+                  className="autocomplete"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </h1>
       {people.loading ? (
         <div className="preloader-wrapper active ">
           <div className="spinner-layer spinner-red-only">
