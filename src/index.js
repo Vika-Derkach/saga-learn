@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import App from "./pages/App";
-import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import store from "./redux";
 import { history } from "./redux/reducers";
@@ -16,9 +15,7 @@ ReactDOM.render(
         <Route path="/" exact>
           <App />
         </Route>
-        <Route path="/blog" exact>
-          <Blog />
-        </Route>
+
         <Route path="*">
           <NotFound />
         </Route>
