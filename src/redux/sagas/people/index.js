@@ -21,6 +21,7 @@ export function* loadPeopleList({ payload }) {
   const data = yield apply(request, request.json);
   yield put({
     type: LOAD_USERS_SUCCESS,
+    payload: data,
   });
 }
 //watcher

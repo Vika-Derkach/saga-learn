@@ -20,11 +20,13 @@ export default function peopleReducer(state = initialPeopleState, action) {
     case LOAD_USERS_SUCCESS:
       return {
         ...state,
+        loading: false,
         data: action.payload,
       };
     case LOAD_USERS_FAILURE:
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
     default:
