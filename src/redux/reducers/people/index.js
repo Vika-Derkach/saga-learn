@@ -21,6 +21,7 @@ export default function peopleReducer(state = initialPeopleState, action) {
       return {
         ...state,
         loading: false,
+        error: null,
         data: action.payload,
       };
     case LOAD_USERS_FAILURE:

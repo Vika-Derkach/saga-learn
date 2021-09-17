@@ -16,8 +16,28 @@ import {
 } from "../../../routes";
 import { LOAD_USERS, LOAD_USERS_SUCCESS } from "../../reducers/people/actions";
 import { selectPeople } from "../../reducers/people/selectors";
+import {
+  LOAD_USER_DETAILS,
+  LOAD_USER_DETAILS_FAILURE,
+  LOAD_USER_DETAILS_SUCCESS,
+} from "../../reducers/peopleDetails/actions";
 //worker
-export function* loadPeopleDetails() {}
+export function* loadPeopleDetails({ payload }) {
+  const { id } = payload;
+  try {
+    const request = yield call(fetch, `https://swapi.dev/api/people/${id}`);
+    const data = yield apply(request, request.json);
+    yield put({
+      type: LOAD_USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_USER_DETAILS_FAILURE,
+      payload: e,
+    });
+  }
+}
 //worker
 export function* loadPeopleList({ payload }) {
   const { page, search } = payload;
@@ -53,7 +73,15 @@ export function* routeChangeSaga() {
       getRouteConfig(PEOPLE_DETAILS_ROUTE)
     );
     if (detailsPage) {
-      console.log("d>>", matchPath);
+      const { id } = detailsPage.params;
+      if (id) {
+        yield put({
+          type: LOAD_USER_DETAILS,
+          payload: {
+            id,
+          },
+        });
+      }
     }
   }
 }
@@ -61,4 +89,5 @@ export function* routeChangeSaga() {
 export default function* peopleSaga() {
   yield fork(routeChangeSaga);
   yield takeEvery(LOAD_USERS, loadPeopleList);
+  yield takeEvery(LOAD_USER_DETAILS, loadPeopleDetails);
 }
